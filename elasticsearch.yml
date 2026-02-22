@@ -1,0 +1,55 @@
+---
+- name: Install Elasticsearch
+  hosts: elasticsearch
+  become: yes
+
+  tasks:
+    - name: Install dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - curl
+          - gnupg
+        state: present
+        update_cache: yes
+
+    - name: Add Elastic GPG key
+      apt_key:
+        url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+        state: present
+
+    - name: Add Elastic repository
+      apt_repository:
+        repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+        state: present
+
+    - name: Install Elasticsearch
+      apt:
+        name: elasticsearch
+        state: present
+        update_cache: yes
+
+    - name: Remove cluster.initial_master_nodes line
+      lineinfile:
+        path: /etc/elasticsearch/elasticsearch.yml
+        regexp: '^#?cluster\.initial_master_nodes'
+        state: absent
+
+    - name: Configure Elasticsearch
+      lineinfile:
+        path: /etc/elasticsearch/elasticsearch.yml
+        regexp: "{{ item.regexp }}"
+        line: "{{ item.line }}"
+      loop:
+        - { regexp: '^#?network.host', line: 'network.host: 0.0.0.0' }
+        - { regexp: '^#?http.port', line: 'http.port: 9200' }
+        - { regexp: '^#?cluster.name', line: 'cluster.name: elk-cluster' }
+        - { regexp: '^#?node.name', line: 'node.name: elasticsearch' }
+        - { regexp: '^#?discovery.type', line: 'discovery.type: single-node' }
+        - { regexp: '^#?xpack.security.enabled', line: 'xpack.security.enabled: false' }
+
+    - name: Enable and start Elasticsearch
+      systemd:
+        name: elasticsearch
+        enabled: yes
+        state: started

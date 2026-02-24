@@ -1,0 +1,4 @@
+kibana_port: 5601
+kibana_host: "0.0.0.0"
+elasticsearch_ip: "192.168.56.11"
+elasticsearch_port: 9200

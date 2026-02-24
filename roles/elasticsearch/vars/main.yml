@@ -1,0 +1,4 @@
+elasticsearch_host: "0.0.0.0"
+elasticsearch_port: 9200
+cluster_name: "elk-cluster"
+node_name: "elasticsearch"

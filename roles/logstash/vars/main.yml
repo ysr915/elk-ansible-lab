@@ -1,0 +1,3 @@
+logstash_port: 5044
+elasticsearch_ip: "192.168.56.11"
+elasticsearch_port: 9200

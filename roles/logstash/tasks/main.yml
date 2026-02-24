@@ -1,0 +1,37 @@
+---
+- name: Install dependencies
+  apt:
+    name:
+      - apt-transport-https
+      - curl
+      - gnupg
+    state: present
+    update_cache: yes
+
+- name: Add Elastic GPG key
+  apt_key:
+    url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
+    state: present
+
+- name: Add Elastic repository
+  apt_repository:
+    repo: "deb https://artifacts.elastic.co/packages/8.x/apt stable main"
+    state: present
+
+- name: Install Logstash
+  apt:
+    name: logstash
+    state: present
+    update_cache: yes
+
+- name: Deploy Logstash pipeline config
+  template:
+    src: logstash.conf.j2
+    dest: /etc/logstash/conf.d/main.conf
+  notify: restart logstash
+
+- name: Enable and start Logstash
+  systemd:
+    name: logstash
+    enabled: yes
+    state: started

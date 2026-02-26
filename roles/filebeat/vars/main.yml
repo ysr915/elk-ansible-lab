@@ -1,0 +1,2 @@
+logstash_host: "192.168.56.12"
+logstash_port: 5044

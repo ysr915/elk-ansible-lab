@@ -1,0 +1,13 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/syslog
+      - /var/log/auth.log
+    fields:
+      host_name: "{{ ansible_hostname }}"
+
+output.logstash:
+  hosts: ["{{ logstash_host }}:{{ logstash_port }}"]
+
+logging.level: info

@@ -7,6 +7,15 @@ filebeat.inputs:
     fields:
       host_name: "{{ ansible_hostname }}"
 
+  - type: log
+    enabled: true
+    paths:
+      - /home/vagrant/airports.ndjson
+    fields:
+      data_type: "airports"
+    json.keys_under_root: true
+    json.add_error_key: true
+
 output.logstash:
   hosts: ["{{ logstash_host }}:{{ logstash_port }}"]
 

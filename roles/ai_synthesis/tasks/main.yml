@@ -1,0 +1,45 @@
+---
+- name: Install Python and pip
+  apt:
+    name:
+      - python3
+      - python3-pip
+    state: present
+    update_cache: yes
+
+- name: Install Python dependencies
+  pip:
+    name:
+      - flask
+      - requests
+    executable: pip3
+
+- name: Copy app to VM
+  copy:
+    src: app.py
+    dest: /home/vagrant/app.py
+    owner: vagrant
+    group: vagrant
+    mode: '0755'
+
+- name: Create systemd service for AI app
+  template:
+    src: ai_synthesis.service.j2
+    dest: /etc/systemd/system/ai_synthesis.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify: restart ai_synthesis
+
+- name: Enable and start AI synthesis app
+  systemd:
+    name: ai_synthesis
+    enabled: yes
+    state: started
+    daemon_reload: yes
+
+- name: Restart AI synthesis app
+  systemd:
+    name: ai_synthesis
+    state: restarted
+    daemon_reload: yes

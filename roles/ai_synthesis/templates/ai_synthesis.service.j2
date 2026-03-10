@@ -1,0 +1,16 @@
+[Unit]
+Description=ELK AI Synthesis App
+After=network.target
+
+[Service]
+User=vagrant
+WorkingDirectory=/home/vagrant
+Environment="GROQ_API_KEY={{ groq_api_key }}"
+Environment="ES_HOST={{ elasticsearch_host }}"
+Environment="ES_PORT={{ elasticsearch_port }}"
+Environment="APP_PORT={{ app_port }}"
+ExecStart=/usr/bin/python3 /home/vagrant/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

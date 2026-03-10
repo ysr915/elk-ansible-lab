@@ -1,0 +1,6 @@
+---
+- name: Deploy AI Synthesis App
+  hosts: kibana
+  become: yes
+  roles:
+    - ai_synthesis

@@ -1,0 +1,4 @@
+groq_api_key: "YOUR_GROQ_API_KEY_HERE"
+elasticsearch_host: "192.168.56.11"
+elasticsearch_port: 9200
+app_port: 5000
